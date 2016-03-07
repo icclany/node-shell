@@ -12,11 +12,18 @@ var done = function(output) {
 
 // The stdin 'data' event fires after a user types in a line
 process.stdin.on('data', function (data) {
-	var dataArray = data.toString().trim().split(" ");
-	var cmd = dataArray[0];
-	var file = dataArray.slice(1);
+	var cmdString = data.toString().trim();
+	var cmdList = cmdString.split(/\s*\|\s*/g)
+	var dataArray = cmdString.split(" ");
+	var cmd = cmdList[0];
+	var file = cmdList.slice(1);
+	var stdin = ""
+
+
+
   // Execute the commands with functions stored in commands.js
-  commands[cmd](file, done);
+  commands[cmd](stdin, file, done);
+
 });
 
 module.exports = function(output) {

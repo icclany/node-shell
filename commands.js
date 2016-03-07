@@ -5,18 +5,17 @@ module.exports.pwd = function(file) {
 	return process.cwd();
 }
 module.exports.date = function(file) {
-	var newDate = new Date();
-	process.stdout.write(newDate.toString());
-	prompt();
+	return Date(); // returns date in String format
 }
 
-module.exports.ls = function(file) {
+module.exports.ls = function(stdin, file, callback) {
 	fs.readdir('.', function(err, files) {
+		var output = "";
 		if (err) throw err;
 		files.forEach(function(file) {
-			process.stdout.write(file.toString() + "\n");
+			output += file.toString() + "\n";
 		})
-		prompt();
+		callback(output)
 	});
 }
 
@@ -35,7 +34,7 @@ module.exports.cat = function(file) {
 	});
 }
 
-module.exports.head = function(file) {
+module.exports.head = function(stdin, file, callback) {
 	file.forEach(function(elem) {
 		fs.readFile(elem.toString(), 'utf8', function(err, text) {
 			if (err) throw err;
@@ -46,7 +45,7 @@ module.exports.head = function(file) {
 	});
 }
 
-module.exports.tail = function(file) {
+module.exports.tail = function(stdin, file, callback) {
 	file.forEach(function(elem) {
 		fs.readFile(elem.toString(), 'utf8', function(err, text) {
 			if (err) throw err;
@@ -57,7 +56,7 @@ module.exports.tail = function(file) {
 	});
 }
 
-module.exports.sort = function(file) {
+module.exports.sort = function(stdin, file, callback) {
 	file.forEach(function(elem) {
 		fs.readFile(elem.toString(), 'utf8', function(err, text) {
 			if (err) throw err;
@@ -68,7 +67,7 @@ module.exports.sort = function(file) {
 	});
 }
 
-module.exports.wc = function(file) {
+module.exports.wc = function(stdin, file, callback) {
 	file.forEach(function(elem) {
 		fs.readFile(elem.toString(), 'utf8', function(err, text) {
 			if (err) throw err;
@@ -79,7 +78,8 @@ module.exports.wc = function(file) {
 	});
 }
 
-module.exports.uniq = function(file) {
+module.exports.uniq = function(stdin, file, callback) {
+	//var result;
 	file.forEach(function(elem) {
 		fs.readFile(elem.toString(), 'utf8', function(err, text) {
 			if (err) throw err;
@@ -87,10 +87,10 @@ module.exports.uniq = function(file) {
 			output = output.filter(function(elem, index, array) {
 				return elem !== array[index-1];
 			})
-			process.stdout.write(output.join("\n")); // Print the text with new lines
-			prompt();
+			callback(output.join("\n")); // Print the text with new lines
 		});
 	});
+	//callback(result);
 }
 
 module.exports.curl = function(file) {
